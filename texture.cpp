@@ -39,6 +39,7 @@ bool Texture::Load()
 //        return false;
 //    }
 
+    glActiveTexture(GL_TEXTURE11);
     glGenTextures(1, &m_textureObj);
     glBindTexture(m_textureTarget, m_textureObj);
     //glTexImage2D(m_textureTarget, 0, GL_RGB, m_pImage->columns(), m_pImage->rows(), -0.5, GL_RGBA, GL_UNSIGNED_BYTE, m_blob.data());
@@ -53,6 +54,6 @@ void Texture::Bind(GLenum TextureUnit)
 {
     //glActiveTexture(TextureUnit);
     //glBindTexture(m_textureTarget, m_textureObj);
-    glActiveTexture(12);
+    glActiveTexture(GL_TEXTURE11);
     glBindTexture(m_textureTarget, 1);
 }
