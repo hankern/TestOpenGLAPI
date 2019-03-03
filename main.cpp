@@ -1,457 +1,441 @@
-//#include <stdio.h>
-//#include <string.h>
-
-//#include <math.h>
-//#include <GL/glew.h>
-//#include <GL/freeglut.h>
-
-//#include "ogldev_util.h"
-//#include "ogldev_math_3d.h"
-
-//GLuint VBO;
-//// 索引缓冲对象的句柄
-//GLuint IBO;
-//GLuint gWorldLocation;
-
-//const char* pVSFileName = "shader.vs";
-//const char* pFSFileName = "shader.fs";
-
-
-//static void RenderSceneCB()
-//{
-//    glClear(GL_COLOR_BUFFER_BIT);
-
-//    static float Scale = 0.0f;
-
-//    Scale += 0.01f;
-
-//    Matrix4f World;
-
-//    World.m[0][0] = cosf(Scale); World.m[0][1] = 0.0f; World.m[0][2] = -sinf(Scale); World.m[0][3] = 0.0f;
-//    World.m[1][0] = 0.0;         World.m[1][1] = 1.0f; World.m[1][2] = 0.0f        ; World.m[1][3] = 0.0f;
-//    World.m[2][0] = sinf(Scale); World.m[2][1] = 0.0f; World.m[2][2] = cosf(Scale) ; World.m[2][3] = 0.0f;
-//    World.m[3][0] = 0.0f;        World.m[3][1] = 0.0f; World.m[3][2] = 0.0f        ; World.m[3][3] = 1.0f;
-
-//    glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, &World.m[0][0]);
-
-//    glEnableVertexAttribArray(0);
-//    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-//    // 每次在绘制之前绑定索引缓冲
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-//    // 索引绘制图形
-//    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
-
-//    glDisableVertexAttribArray(0);
-
-//    glutSwapBuffers();
-//}
-
-
-//static void InitializeGlutCallbacks()
-//{
-//    glutDisplayFunc(RenderSceneCB);
-//    glutIdleFunc(RenderSceneCB);
-//}
-
-//static void CreateVertexBuffer()
-//{
-//    // 金字塔的四个顶点
-//    Vector3f Vertices[4];
-//    Vertices[0] = Vector3f(-1.0f, -1.0f, 0.0f);
-//    Vertices[1] = Vector3f(0.0f, -1.0f, 1.0f);
-//    Vertices[2] = Vector3f(1.0f, -1.0f, 0.0f);
-//    Vertices[3] = Vector3f(0.0f, 1.0f, 0.0f);
-
-//    glGenBuffers(1, &VBO);
-//    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
-//}
-
-//// 创建索引缓冲器
-//static void CreateIndexBuffer()
-//{
-//    // 四个三角形面的顶点索引集
-//    unsigned int Indices[] = { 0, 3, 1,
-//                               1, 3, 2,
-//                               2, 3, 0,
-//                               0, 1, 2 };
-//    // 创建缓冲区
-//    glGenBuffers(1, &IBO);
-//    // 绑定缓冲区
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-//    // 添加缓冲区数据
-//    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
-//}
-
-//static void AddShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType)
-//{
-//    GLuint ShaderObj = glCreateShader(ShaderType);
-
-//    if (ShaderObj == 0) {
-//        fprintf(stderr, "Error creating shader type %d\n", ShaderType);
-//        exit(1);
-//    }
-
-//    const GLchar* p[1];
-//    p[0] = pShaderText;
-//    GLint Lengths[1];
-//    Lengths[0]= strlen(pShaderText);
-//    glShaderSource(ShaderObj, 1, p, Lengths);
-//    glCompileShader(ShaderObj);
-//    GLint success;
-//    glGetShaderiv(ShaderObj, GL_COMPILE_STATUS, &success);
-//    if (!success) {
-//        GLchar InfoLog[1024];
-//        glGetShaderInfoLog(ShaderObj, 1024, NULL, InfoLog);
-//        fprintf(stderr, "Error compiling shader type %d: '%s'\n", ShaderType, InfoLog);
-//        exit(1);
-//    }
-
-//    glAttachShader(ShaderProgram, ShaderObj);
-//}
-
-//static void CompileShaders()
-//{
-//    GLuint ShaderProgram = glCreateProgram();
-
-//    if (ShaderProgram == 0) {
-//        fprintf(stderr, "Error creating shader program\n");
-//        exit(1);
-//    }
-
-//    string vs, fs;
-
-//    if (!ReadFile(pVSFileName, vs)) {
-//        exit(1);
-//    };
-
-//    if (!ReadFile(pFSFileName, fs)) {
-//        exit(1);
-//    };
-
-//    AddShader(ShaderProgram, vs.c_str(), GL_VERTEX_SHADER);
-//    AddShader(ShaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
-
-//    GLint Success = 0;
-//    GLchar ErrorLog[1024] = { 0 };
-
-//    glLinkProgram(ShaderProgram);
-//    glGetProgramiv(ShaderProgram, GL_LINK_STATUS, &Success);
-//    if (Success == 0) {
-//        glGetProgramInfoLog(ShaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
-//        fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
-//        exit(1);
-//    }
-
-//    glValidateProgram(ShaderProgram);
-//    glGetProgramiv(ShaderProgram, GL_VALIDATE_STATUS, &Success);
-//    if (!Success) {
-//        glGetProgramInfoLog(ShaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
-//        fprintf(stderr, "Invalid shader program: '%s'\n", ErrorLog);
-//        exit(1);
-//    }
-
-//    glUseProgram(ShaderProgram);
-
-//    gWorldLocation = glGetUniformLocation(ShaderProgram, "gWorld");
-//    assert(gWorldLocation != 0xFFFFFFFF);
-//}
-
-//int main(int argc, char** argv)
-//{
-//    glutInit(&argc, argv);
-//    glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGBA);
-//    glutInitWindowSize(800, 600);
-//    glutInitWindowPosition(100, 100);
-//    glutCreateWindow("Tutorial 10");
-
-//    InitializeGlutCallbacks();
-
-//    // Must be done after glut is initialized!
-//    GLenum res = glewInit();
-//    if (res != GLEW_OK) {
-//      fprintf(stderr, "Error: '%s'\n", glewGetErrorString(res));
-//      return 1;
-//    }
-
-//    printf("GL version: %s\n", glGetString(GL_VERSION));
-
-//    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
-//    CreateVertexBuffer();
-//    CreateIndexBuffer();
-
-//    CompileShaders();
-
-//    glutMainLoop();
-
-//    return 0;
-//}
-
-
-
-
-
-
-
-
-
-//#include <QCoreApplication>
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
 #include <math.h>
 #include <GL/glew.h>
 #include <GL/freeglut.h>
-#include "ogldev_util.h"
+#include <QBitmap>
+#include <QImage>
+#include <QRgb>
+#include <QColor>
+
 #include "pipeline.h"
 #include "camera.h"
 #include "texture.h"
+#include "lighting_technique.h"
+#include "glut_backend.h"
+#include "util.h"
+#include "mesh.h"
+#include "shadow_map_fbo.h"
+#include "shadow_map_technique.h"
 
 #define WINDOW_WIDTH  800
 #define WINDOW_HEIGHT 600
-const char* pVSFileName = "shader.vs";
-const char* pFSFileName = "shader.fs";
-struct Vertex
-{
-    Vector3f m_pos;
-    Vector2f m_tex;
+void saveImg(){
+    //保存图片
 
-    Vertex() {}
 
-    Vertex(Vector3f pos, Vector2f tex)
+
+    QImage* img=new QImage(WINDOW_WIDTH,WINDOW_HEIGHT,QImage::Format_ARGB32);
+    uchar* tmpBIT = img->bits();
+
+
+//    //从颜色缓冲区中读取数据
+//    int tmpPixelSize = WINDOW_WIDTH*WINDOW_HEIGHT * 4;
+//    char* tmpPixelsBuffer = (char*)malloc(tmpPixelSize);
+//    //glReadBuffer(GL_FRONT);
+//    glReadPixels(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT,GL_RGBA, GL_UNSIGNED_BYTE, tmpPixelsBuffer);
+//    for (int y = WINDOW_HEIGHT-1; y >=0 ; y--)
+//    {
+//        for (int x = 0; x < WINDOW_WIDTH; x++)
+//        {
+
+//            //蓝色
+//            tmpBIT[0] = tmpPixelsBuffer[(y*WINDOW_WIDTH + x) * 4 + 2];
+//            //绿色
+//            tmpBIT[1] = tmpPixelsBuffer[(y*WINDOW_WIDTH + x) * 4 + 1];
+//            //红色
+//            tmpBIT[2] = tmpPixelsBuffer[(y*WINDOW_WIDTH + x) * 4 + 0];
+//            tmpBIT[3] = 100;//不起作用
+//            tmpBIT += 4;
+//        }
+//    }
+
+
+
+
+
+
+//    //从深度缓冲区读取数据
+//    int tmpPixelSize = WINDOW_WIDTH*WINDOW_HEIGHT;
+//    char* tmpPixelsBuffer = (char*)malloc(tmpPixelSize);
+//    //glReadBuffer(GL_NONE);
+//    //glReadBuffer(GL_BACK);
+//    glReadPixels(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT,GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, tmpPixelsBuffer);
+
+//    GLenum aaa = glGetError();
+//    for (int y = WINDOW_HEIGHT-1; y >=0 ; y--)
+//    {
+//        for (int x = 0; x < WINDOW_WIDTH; x++)
+//        {
+//            //int iii1=tmpPixelsBuffer[(y*WINDOW_WIDTH + x)  + 0];
+//            uchar iii=tmpPixelsBuffer[(y*WINDOW_WIDTH + x)  + 0];
+//            //int iii=tmpPixelsBuffer[(y*WINDOW_WIDTH + x)  + 0];
+//            if(iii<-3){
+//                int kk=0;
+//            }
+//            if(iii<-10){
+//                int kk=0;
+//            }
+//            if(iii<-50){
+//                int kk=0;
+//            }
+//            if(iii>0){
+//                int kk=0;
+//            }
+//            //iii=iii*10;
+//            //蓝色
+//            tmpBIT[0] = iii;
+//            //绿色
+//            tmpBIT[1] = iii;
+//            //红色
+//            tmpBIT[2] = iii;
+//            tmpBIT[3] = 255;//不起作用
+//            tmpBIT += 4;
+//        }
+//    }
+
+    //从深度缓冲区读取数据
+    int tmpPixelSize = WINDOW_WIDTH*WINDOW_HEIGHT;
+    //float* tmpPixelsBuffer = (float*)malloc(tmpPixelSize*4);
+    float* tmpPixelsBuffer = new float[ tmpPixelSize ];
+    //GLfloat* tmpPixelsBuffer = new GLfloat[ tmpPixelSize ];
+    //glReadBuffer(GL_NONE);
+    //glReadBuffer(GL_BACK);
+    glReadPixels(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT,GL_DEPTH_COMPONENT, GL_FLOAT, tmpPixelsBuffer);
+
+    GLenum aaa = glGetError();
+    for (int y = WINDOW_HEIGHT-1; y >=0 ; y--)
     {
-        m_pos = pos;
-        m_tex = tex;
+        for (int x = 0; x < WINDOW_WIDTH; x++)
+        {
+            //int iii1=tmpPixelsBuffer[(y*WINDOW_WIDTH + x)  + 0];
+            float iii=tmpPixelsBuffer[(y*WINDOW_WIDTH + x)  + 0];
+            if(iii<0.9){
+                int kk=0;
+            }
+            if(iii<0.8){
+                int kk=0;
+            }
+            if(iii<0.2){
+                int kk=0;
+            }
+            if(iii<0.1){
+                int kk=0;
+            }
+            //iii=iii*10;
+            iii*=255;
+            //蓝色
+            tmpBIT[0] = iii;
+            //绿色
+            tmpBIT[1] = iii;
+            //红色
+            tmpBIT[2] = iii;
+            tmpBIT[3] = 255;//不起作用
+            tmpBIT += 4;
+        }
     }
+
+
+    img->save("a.jpg");
+}
+class Main : public ICallbacks
+{
+public:
+
+    Main()
+    {
+        m_pEffect = NULL;
+        m_pShadowMapTech = NULL;
+        m_pGameCamera = NULL;
+        m_pMesh = NULL;
+        m_pQuad = NULL;
+        m_scale = 0.0f;
+
+        m_spotLight.AmbientIntensity = 0.0f;
+        m_spotLight.DiffuseIntensity = 0.9f;
+        m_spotLight.Color = Vector3f(1.0f, 1.0f, 1.0f);
+        m_spotLight.Attenuation.Linear = 0.01f;
+        m_spotLight.Position  = Vector3f(-20.0, 20.0, 5.0f);
+        m_spotLight.Direction = Vector3f(1.0f, -1.0f, 0.0f);
+        m_spotLight.Cutoff =  20.0f;
+
+        m_directionalLight.Color = Vector3f(1.0f, 1.0f, 1.0f);
+        m_directionalLight.AmbientIntensity = 1.0f;
+        m_directionalLight.DiffuseIntensity = 0.01f;
+        m_directionalLight.Direction = Vector3f(1.0f, 0.0f, 1.0f);
+    }
+
+    virtual ~Main()
+    {
+        SAFE_DELETE(m_pEffect);
+        SAFE_DELETE(m_pShadowMapTech);
+        SAFE_DELETE(m_pGameCamera);
+        SAFE_DELETE(m_pMesh);
+        SAFE_DELETE(m_pQuad);
+    }
+
+    bool Init()
+    {
+        if (!m_shadowMapFBO.Init(WINDOW_WIDTH, WINDOW_HEIGHT)) {
+            return false;
+        }
+
+        m_pGameCamera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+        m_pEffect = new LightingTechnique();
+
+        if (!m_pEffect->Init()) {
+            printf("Error initializing the lighting technique\n");
+            return false;
+        }
+
+        m_pShadowMapTech = new ShadowMapTechnique();
+
+        if (!m_pShadowMapTech->Init()) {
+            printf("Error initializing the shadow map technique\n");
+            return false;
+        }
+
+        m_pShadowMapTech->Enable();
+
+        m_pQuad = new Mesh();
+
+        if (!m_pQuad->LoadMesh("../Content/quad.obj")) {
+            return false;
+        }
+
+        m_pMesh = new Mesh();
+
+        return m_pMesh->LoadMesh("../Content/phoenix_ugv.md2");
+
+//        Texture* m_Textures = new Texture(GL_TEXTURE_2D, "../Content/bricks.jpg");
+//        bool Ret = m_Textures->Load();
+//        m_Textures->Bind(GL_TEXTURE0);
+
+
+//        Vector3f Pos(-10.0f, 4.0f, 0.0f);
+//        Vector3f Target(1.0f, 0.0f, 1.0f);
+//        Vector3f Up(0.0, 1.0f, 0.0f);
+//        m_pGameCamera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT, Pos, Target, Up);
+
+//        m_pEffect = new LightingTechnique();
+
+//        if (!m_pEffect->Init()){
+//            printf("Error initializing the lighting technique\n");
+//            return false;
+//        }
+
+//        m_pEffect->Enable();
+
+//        m_pEffect->SetTextureUnit(0);
+
+//        m_pMesh = new Mesh();
+
+//        return m_pMesh->LoadMesh("../Content/phoenix_ugv.md2");
+    }
+
+    void Run()
+    {
+        GLUTBackendRun(this);
+    }
+
+    virtual void RenderSceneCB()
+    {
+        m_pGameCamera->OnRender();
+        m_scale += 0.05f;
+
+        ShadowMapPass();
+
+        RenderPass();
+
+        glutSwapBuffers();
+
+
+
+//        glEnable(GL_DEPTH_TEST);
+//        m_pGameCamera->OnRender();
+//        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+//        m_scale += 0.01f;
+//        Pipeline p;
+//        p.Scale(0.1f, 0.1f, 0.1f);
+//        p.Rotate(0.0f, m_scale, 0.0f);
+//        p.WorldPos(0.0f, 0.0f, 10.0f);
+//        p.SetCamera(m_pGameCamera->GetPos(), m_pGameCamera->GetTarget(), m_pGameCamera->GetUp());
+//        p.SetPerspectiveProj(60.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 1.0f, 100.0f);
+//        m_pEffect->SetWVP(p.GetWVPTrans());
+//        m_pEffect->SetWorldMatrix(p.GetWorldTrans());
+//        m_pEffect->SetDirectionalLight(m_directionalLight);
+//        m_pEffect->SetEyeWorldPos(m_pGameCamera->GetPos());
+//        m_pEffect->SetMatSpecularIntensity(0.0f);
+//        m_pEffect->SetMatSpecularPower(0);
+//        m_pMesh->Render();
+//        saveImg();
+//        glutSwapBuffers();
+
+
+    }
+
+    virtual void ShadowMapPass()
+    {
+        m_shadowMapFBO.BindForWriting();
+
+
+        glClear(GL_DEPTH_BUFFER_BIT);
+        //glEnable(GL_DEPTH_TEST);
+        //glDepthRange(0,0.5);
+
+        Pipeline p;
+        p.Scale(0.1f, 0.1f, 0.1f);
+        p.Rotate(0.0f, m_scale, 0.0f);
+        p.WorldPos(0.0f, 0.0f, 5.0f);
+        p.SetCamera(m_spotLight.Position, m_spotLight.Direction, Vector3f(0.0f, 1.0f, 0.0f));
+        p.SetPerspectiveProj(20.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 1.0f, 50.0f);
+        m_pShadowMapTech->SetWVP(p.GetWVPTrans());
+
+        m_pMesh->Render();
+        //saveImg();
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+//        m_shadowMapFBO.BindForWriting();
+//        glDepthRange(0,0.5);
+
+//        //glDepthRange(1,0);
+//        //glClearDepth(200.0);
+//        glClear(GL_DEPTH_BUFFER_BIT);
+//        glEnable(GL_DEPTH_TEST);
+
+
+
+
+//        //saveImg();
+
+//        Pipeline p;
+//        p.Scale(0.2f, 0.2f, 0.2f);
+//        p.Rotate(0.0f, m_scale, 0.0f);
+//        p.WorldPos(0.0f, 0.0f, 5.0f);
+//        p.SetCamera(m_spotLight.Position, m_spotLight.Direction, Vector3f(0.0f, 1.0f, 0.0f));
+//        p.SetPerspectiveProj(60.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 1.0f, 50.0f);
+//        m_pShadowMapTech->SetWVP(p.GetWVPTrans());
+//        m_pMesh->Render();
+
+//        //saveImg();
+//        glEnable(GL_TEXTURE_2D);
+//        glDrawBuffer(GL_NONE);
+//        glReadBuffer(GL_NONE);
+//        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
+    virtual void RenderPass()
+    {
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        m_pShadowMapTech->SetTextureUnit(0);
+        m_shadowMapFBO.BindForReading(GL_TEXTURE0);
+
+        Pipeline p;
+        p.Scale(5.0f, 5.0f, 5.0f);
+        p.WorldPos(0.0f, 0.0f, 10.0f);
+        p.SetCamera(m_pGameCamera->GetPos(), m_pGameCamera->GetTarget(), m_pGameCamera->GetUp());
+        p.SetPerspectiveProj(60.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 1.0f, 50.0f);
+        m_pShadowMapTech->SetWVP(p.GetWVPTrans());
+        m_pQuad->Render();
+
+
+
+
+
+//        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//        glDepthRange(1,0);
+//        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//        //saveImg();
+
+//        m_pShadowMapTech->SetTextureUnit(0);
+//        m_shadowMapFBO.BindForReading(GL_TEXTURE0);
+
+//        //glGenerateMipmapEXT(GL_TEXTURE_2D);
+
+//        Pipeline p;
+//        p.Scale(5.0f, 5.0f, 5.0f);
+//        p.WorldPos(0.0f, 0.0f, 10.0f);
+//        p.SetCamera(m_pGameCamera->GetPos(), m_pGameCamera->GetTarget(), m_pGameCamera->GetUp());
+//        p.SetPerspectiveProj(60.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 1.0f, 50.0f);
+//        m_pShadowMapTech->SetWVP(p.GetWVPTrans());
+//        m_pQuad->Render();
+//        //saveImg();
+    }
+
+    virtual void IdleCB()
+    {
+        RenderSceneCB();
+    }
+
+    virtual void SpecialKeyboardCB(int Key, int x, int y)
+    {
+        m_pGameCamera->OnKeyboard(Key);
+    }
+
+
+    virtual void KeyboardCB(unsigned char Key, int x, int y)
+    {
+        switch (Key) {
+            case 'q':
+                glutLeaveMainLoop();
+                break;
+        }
+    }
+
+
+    virtual void PassiveMouseCB(int x, int y)
+    {
+        m_pGameCamera->OnMouse(x, y);
+    }
+
+private:
+
+    LightingTechnique* m_pEffect;
+    ShadowMapTechnique* m_pShadowMapTech;
+    Camera* m_pGameCamera;
+    float m_scale;
+    SpotLight m_spotLight;
+    Mesh* m_pMesh;
+    Mesh* m_pQuad;
+    ShadowMapFBO m_shadowMapFBO;
+    DirectionalLight m_directionalLight;
 };
-
-
-GLuint VBO;
-GLuint IBO;
-GLuint gWVPLocation;
-GLuint gSampler;
-Texture* pTexture = NULL;
-Camera* pGameCamera = NULL;
-
-
-static void RenderSceneCB()
-{
-    pGameCamera->OnRender();
-
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    static float Scale = 0.0f;
-
-    Scale += 0.1f;
-
-    Pipeline p;
-    p.Rotate(0.0f, Scale, 0.0f);
-    p.WorldPos(0.0f, 0.0f, 3.0f);
-    p.SetCamera(pGameCamera->GetPos(), pGameCamera->GetTarget(), pGameCamera->GetUp());
-    p.SetPerspectiveProj(60.0f, WINDOW_WIDTH, WINDOW_HEIGHT, 1.0f, 100.0f);
-
-    glUniformMatrix4fv(gWVPLocation, 1, GL_TRUE, (const GLfloat*)p.GetTrans());
-
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)12);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-    //pTexture->Bind(GL_TEXTURE0);
-    pTexture->Bind(GL_TEXTURE31);
-    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
-
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
-
-    glutSwapBuffers();
-}
-
-
-static void SpecialKeyboardCB(int Key, int x, int y)
-{
-    pGameCamera->OnKeyboard(Key);
-}
-
-
-static void KeyboardCB(unsigned char Key, int x, int y)
-{
-    switch (Key) {
-        case 'q':
-            glutLeaveMainLoop();
-    }
-}
-
-
-static void PassiveMouseCB(int x, int y)
-{
-    pGameCamera->OnMouse(x, y);
-}
-
-
-static void InitializeGlutCallbacks()
-{
-    glutDisplayFunc(RenderSceneCB);
-    glutIdleFunc(RenderSceneCB);
-    glutSpecialFunc(SpecialKeyboardCB);
-    glutPassiveMotionFunc(PassiveMouseCB);
-    glutKeyboardFunc(KeyboardCB);
-}
-
-
-static void CreateVertexBuffer()
-{
-    Vertex Vertices[4] = { Vertex(Vector3f(-1.0f, -1.0f, 0.5773f), Vector2f(0.0f, 0.0f)),
-                           Vertex(Vector3f(0.0f, -1.0f, -1.15475), Vector2f(0.5f, 0.0f)),
-                           Vertex(Vector3f(1.0f, -1.0f, 0.5773f),  Vector2f(1.0f, 0.0f)),
-                           Vertex(Vector3f(0.0f, 1.0f, 0.0f),      Vector2f(0.5f, 1.0f)) };
-
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
-}
-
-
-static void CreateIndexBuffer()
-{
-    unsigned int Indices[] = { 0, 3, 1,
-                               1, 3, 2,
-                               2, 3, 0,
-                               1, 2, 0 };
-
-    glGenBuffers(1, &IBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
-}
-
-
-static void AddShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType)
-{
-    GLuint ShaderObj = glCreateShader(ShaderType);
-
-    if (ShaderObj == 0) {
-        fprintf(stderr, "Error creating shader type %d\n", ShaderType);
-        exit(0);
-    }
-
-    const GLchar* p[1];
-    p[0] = pShaderText;
-    GLint Lengths[1];
-    Lengths[0]= strlen(pShaderText);
-    glShaderSource(ShaderObj, 1, p, Lengths);
-    glCompileShader(ShaderObj);
-    GLint success;
-    glGetShaderiv(ShaderObj, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        GLchar InfoLog[1024];
-        glGetShaderInfoLog(ShaderObj, 1024, NULL, InfoLog);
-        fprintf(stderr, "Error compiling shader type %d: '%s'\n", ShaderType, InfoLog);
-        exit(1);
-    }
-
-    glAttachShader(ShaderProgram, ShaderObj);
-}
-
-
-static void CompileShaders()
-{
-    GLuint ShaderProgram = glCreateProgram();
-
-    if (ShaderProgram == 0) {
-        fprintf(stderr, "Error creating shader program\n");
-        exit(1);
-    }
-
-//    AddShader(ShaderProgram, pVS, GL_VERTEX_SHADER);
-//    AddShader(ShaderProgram, pFS, GL_FRAGMENT_SHADER);
-    string vs, fs;
-
-    if (!ReadFile(pVSFileName, vs)) {
-        exit(1);
-    };
-
-    if (!ReadFile(pFSFileName, fs)) {
-        exit(1);
-    };
-    AddShader(ShaderProgram, vs.c_str(), GL_VERTEX_SHADER);
-    AddShader(ShaderProgram, fs.c_str(), GL_FRAGMENT_SHADER);
-
-    GLint Success = 0;
-    GLchar ErrorLog[1024] = { 0 };
-
-    glLinkProgram(ShaderProgram);
-    glGetProgramiv(ShaderProgram, GL_LINK_STATUS, &Success);
-    if (Success == 0) {
-        glGetProgramInfoLog(ShaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
-        fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
-        exit(1);
-    }
-
-    glValidateProgram(ShaderProgram);
-    glGetProgramiv(ShaderProgram, GL_VALIDATE_STATUS, &Success);
-    if (!Success) {
-        glGetProgramInfoLog(ShaderProgram, sizeof(ErrorLog), NULL, ErrorLog);
-        fprintf(stderr, "Invalid shader program: '%s'\n", ErrorLog);
-        exit(1);
-    }
-
-    glUseProgram(ShaderProgram);
-
-    gWVPLocation = glGetUniformLocation(ShaderProgram, "gWVP");
-    assert(gWVPLocation != 0xFFFFFFFF);
-    gSampler = glGetUniformLocation(ShaderProgram, "gSampler");
-    assert(gSampler != 0xFFFFFFFF);
-}
 
 
 int main(int argc, char** argv)
 {
-    //QCoreApplication a(argc, argv);
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGBA);
-    glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-    glutInitWindowPosition(100, 100);
-    glutCreateWindow("Tutorial 16");
-    //glutGameModeString("1280x1024@32");
-    //glutEnterGameMode();
+    GLUTBackendInit(argc, argv);
 
-    InitializeGlutCallbacks();
-
-    pGameCamera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT);
-
-    // Must be done after glut is initialized!
-    GLenum res = glewInit();
-    if (res != GLEW_OK) {
-      fprintf(stderr, "Error: '%s'\n", glewGetErrorString(res));
-      return 1;
-    }
-
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glFrontFace(GL_CW);
-    glCullFace(GL_BACK);
-    glEnable(GL_CULL_FACE);
-
-    CreateVertexBuffer();
-    CreateIndexBuffer();
-
-    CompileShaders();
-
-    //glUniform1i(gSampler, 0);
-    glUniform1i(gSampler, 11);
-    //glUniform1i(gSampler, GL_TEXTURE11);
-    //GL_TEXTURE11
-
-    pTexture = new Texture(GL_TEXTURE_2D, "test.png");
-
-    if (!pTexture->Load()) {
+    if (!GLUTBackendCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, 32, false, "OpenGL tutors")) {
         return 1;
     }
 
-    glutMainLoop();
+    Main* pApp = new Main();
+
+    if (!pApp->Init()) {
+        return 1;
+    }
+
+    const GLubyte* name = glGetString(GL_VENDOR); //返回负责当前OpenGL实现厂商的名字
+    const GLubyte* biaoshifu = glGetString(GL_RENDERER); //返回一个渲染器标识符，通常是个硬件平台
+    const GLubyte* OpenGLVersion = glGetString(GL_VERSION); //返回当前OpenGL实现的版本号
+    const GLubyte* gluVersion = gluGetString(GLU_VERSION); //返回当前GLU工具库版本
+    const GLubyte* glslVersion = glGetString(GL_SHADING_LANGUAGE_VERSION);
+
+    printf("OpenGL实现厂商的名字：%s\n", name);
+    printf("渲染器标识符：%s\n", biaoshifu);
+    printf("OpenGL实现的版本号：%s\n", OpenGLVersion);
+    printf("OGLU工具库版本：%s\n", gluVersion);
+    printf("GLSL Version : %s\n", glslVersion);
+
+    GLint m_maxRenderBufferSize;
+    glGetIntegerv(GL_MAX_RENDERBUFFER_SIZE, &m_maxRenderBufferSize);
+
+    pApp->Run();
+
+    delete pApp;
 
     return 0;
 }
