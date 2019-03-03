@@ -14,7 +14,16 @@ SOURCES += main.cpp \
     ogldev_util.cpp \
     camera.cpp \
     pipeline.cpp \
-    texture.cpp
+    texture.cpp \
+    lighting_technique.cpp \
+    technique.cpp \
+    glut_backend.cpp \
+    mesh.cpp \
+    shadow_map_fbo.cpp \
+    shadow_map_technique.cpp \
+    skybox.cpp \
+    skybox_technique.cpp \
+    cubemap_texture.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -28,8 +37,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 LIBS+=-L"D:/FreeGlut_Glew/lib" -lfreeglut -lglew32
+LIBS+=-L"D:\Program Files\ImageMagick-6.2.7-Q16\lib" -lCORE_RL_Magick++_
+LIBS+=-L"D:/assimp" -lassimp-vc140-mtd
+
 
 INCLUDEPATH+=D:\FreeGlut_Glew\include
+INCLUDEPATH+=D:\assimp\include
+INCLUDEPATH+="D:\Program Files\ImageMagick-6.2.7-Q16\include"
 
 HEADERS += \
     ogldev_math_3d.h \
@@ -39,4 +53,14 @@ HEADERS += \
     texture.h \
     vector3.h \
     math_3d.h \
-    ogldev_util.h
+    ogldev_util.h \
+    util.h \
+    lighting_technique.h \
+    technique.h \
+    glut_backend.h \
+    mesh.h \
+    shadow_map_fbo.h \
+    shadow_map_technique.h \
+    skybox.h \
+    skybox_technique.h \
+    cubemap_texture.h

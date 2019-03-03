@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.2.1, 2019-03-03T09:59:50. -->
+<!-- Written by QtCreator 4.2.1, 2019-04-08T19:02:47. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -112,7 +112,9 @@
     </valuemap>
     <value type="int" key="ProjectExplorer.BuildConfiguration.BuildStepListCount">2</value>
     <value type="bool" key="ProjectExplorer.BuildConfiguration.ClearSystemEnvironment">false</value>
-    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges"/>
+    <valuelist type="QVariantList" key="ProjectExplorer.BuildConfiguration.UserEnvironmentChanges">
+     <value type="QString">PATH=D:\Qt\Qt5.8.0\5.8\msvc2015\bin;D:\Program Files\Microsoft Visual Studio 14.0_2015\Common7\IDE\CommonExtensions\Microsoft\TestWindow;C:\Program Files\Microsoft SDKs\F#\4.0\Framework\v4.0\;C:\Program Files\MSBuild\14.0\bin;D:\Program Files\Microsoft Visual Studio 14.0_2015\Common7\IDE\;D:\Program Files\Microsoft Visual Studio 14.0_2015\VC\BIN;D:\Program Files\Microsoft Visual Studio 14.0_2015\Common7\Tools;C:\Windows\Microsoft.NET\Framework\v4.0.30319;D:\Program Files\Microsoft Visual Studio 14.0_2015\VC\VCPackages;C:\Program Files\HTML Help Workshop;D:\Program Files\Microsoft Visual Studio 14.0_2015\Team Tools\Performance Tools;C:\Program Files\Windows Kits\10\bin\x86;C:\Program Files\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.1 Tools\;d:\Program Files\Anaconda3\Lib\site-packages\PyQt5;D:\ProgramData\Anaconda3\Lib\site-packages\PyQt5;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Git\cmd;d:\Program Files\CMake 2.8\bin;d:\Program Files\Anaconda3;d:\Program Files\Anaconda3\Scripts;d:\Program Files\Anaconda3\Library\bin;d:\Program Files\Tesseract-OCR;C:\Users\Administrator\.dnx\bin;C:\Program Files\Microsoft DNX\Dnvm\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;D:\Program Files\Microsoft Visual Studio 14.0_2015\VC\bin;D:\Strawberry-Perl526\c\bin;D:\Strawberry-Perl526\perl\site\bin;D:\Strawberry-Perl526\perl\bin;D:\nasm-2.13.03;D:\OSG_OAGEARTH\bin;D:\OSG_OAGEARTH\bin\osgPlugins-3.6.3;D:\FreeGlut_Glew\bin;D:\Program Files\TortoiseGit\bin;D:\assimp;C:\Users\Administrator\.dnx\bin;C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps;D:\assimp;D:\Program Files\ImageMagick-6.2.7-Q16</value>
+    </valuelist>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Debug</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4BuildConfiguration</value>
@@ -285,8 +287,8 @@
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">HOpenGL</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:E:/Projects/QT5.8/HOpenGL/HOpenGL.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">HOpenGL2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:E:/Projects/QT5.8/TestOpenGLAPI/HOpenGL.pro</value>
     <value type="bool" key="QmakeProjectManager.QmakeRunConfiguration.UseLibrarySearchPath">true</value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments"></value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">HOpenGL.pro</value>
