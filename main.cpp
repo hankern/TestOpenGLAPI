@@ -440,7 +440,10 @@ int main(int argc, char** argv)
 
     CompileShaders();
 
-    glUniform1i(gSampler, 0);
+    //glUniform1i(gSampler, 0);
+    glUniform1i(gSampler, 11);
+    //glUniform1i(gSampler, GL_TEXTURE11);
+    //GL_TEXTURE11
 
     pTexture = new Texture(GL_TEXTURE_2D, "test.png");
 
