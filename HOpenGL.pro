@@ -14,7 +14,10 @@ SOURCES += main.cpp \
     ogldev_util.cpp \
     camera.cpp \
     pipeline.cpp \
-    texture.cpp
+    texture.cpp \
+    lighting_technique.cpp \
+    technique.cpp \
+    glut_backend.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -39,4 +42,8 @@ HEADERS += \
     texture.h \
     vector3.h \
     math_3d.h \
-    ogldev_util.h
+    ogldev_util.h \
+    util.h \
+    lighting_technique.h \
+    technique.h \
+    glut_backend.h
